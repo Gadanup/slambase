@@ -77,19 +77,19 @@
 
 #### 2.4 Configure Supabase Client
 
-- [ ] Create `src/lib/supabase/client.ts`
-- [ ] Setup browser client
-- [ ] Create `src/lib/supabase/server.ts`
-- [ ] Setup server client for server components
-- [ ] Create `src/lib/supabase/middleware.ts` for auth
+- [x] Create `src/lib/supabase/client.ts`
+- [x] Setup browser client
+- [x] Create `src/lib/supabase/server.ts`
+- [x] Setup server client for server components
+- [x] Create `src/lib/supabase/middleware.ts` for auth
 
 #### 2.5 Setup Global Styles
 
-- [ ] Update `globals.css` with theme variables
-- [ ] Add dark mode configuration
-- [ ] Setup base styles for body and html
-- [ ] Configure smooth scrolling
-- [ ] Add custom utility classes
+- [x] Update `globals.css` with theme variables
+- [x] Add dark mode configuration
+- [x] Setup base styles for body and html
+- [x] Configure smooth scrolling
+- [x] Add custom utility classes
 
 ---
 
@@ -97,35 +97,35 @@
 
 #### 3.1 Create Database Tables
 
-- [ ] Open Supabase SQL Editor
-- [ ] Create `promotions` table
-- [ ] Create `wrestlers` table with foreign key to promotions
-- [ ] Create `championships` table
-- [ ] Create `title_reigns` table with foreign keys
-- [ ] Create `events` table
-- [ ] Create `matches` table
-- [ ] Create `match_participants` junction table
-- [ ] Create `feuds` table
-- [ ] Create `feud_participants` junction table
-- [ ] Create `admin_users` table
+- [x] Open Supabase SQL Editor
+- [x] Create `promotions` table
+- [x] Create `wrestlers` table with foreign key to promotions
+- [x] Create `championships` table
+- [x] Create `title_reigns` table with foreign keys
+- [x] Create `events` table
+- [x] Create `matches` table
+- [x] Create `match_participants` junction table
+- [x] Create `feuds` table
+- [x] Create `feud_participants` junction table
+- [x] Create `admin_users` table
 
 #### 3.2 Enable Row Level Security (RLS)
 
-- [ ] Enable RLS on all tables
-- [ ] Create policy for public read access on all tables
-- [ ] Create policy for admin write access
-- [ ] Test policies with anon key
-- [ ] Test policies with authenticated user
+- [x] Enable RLS on all tables
+- [x] Create policy for public read access on all tables
+- [x] Create policy for admin write access
+- [x] Test policies with anon key
+- [x] Test policies with authenticated user
 
 #### 3.3 Setup Storage for Images
 
-- [ ] Create storage bucket named "wrestlers"
-- [ ] Create storage bucket named "events"
-- [ ] Create storage bucket named "championships"
-- [ ] Setup bucket policies for public read
-- [ ] Setup bucket policies for admin upload
-- [ ] Configure file size limits
-- [ ] Configure allowed file types (jpg, png, webp)
+- [x] Create storage bucket named "wrestlers"
+- [x] Create storage bucket named "events"
+- [x] Create storage bucket named "championships"
+- [x] Setup bucket policies for public read
+- [x] Setup bucket policies for admin upload
+- [x] Configure file size limits
+- [x] Configure allowed file types (jpg, png, webp)
 
 #### 3.4 Generate TypeScript Types
 
