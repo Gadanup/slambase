@@ -58,22 +58,22 @@
 
 #### 2.2 Setup Typography System
 
-- [ ] Add Google Fonts links to layout (Bebas Neue, Inter)
-- [ ] Configure font families in Tailwind config
-- [ ] Define display font sizes (xl, lg, md)
-- [ ] Setup font weights
+- [x] Add Google Fonts links to layout (Bebas Neue, Inter)
+- [x] Configure font families in Tailwind config
+- [x] Define display font sizes (xl, lg, md)
+- [x] Setup font weights
 
 #### 2.3 Create Project Folder Structure
 
-- [ ] Create `src/lib` directory for utilities
-- [ ] Create `src/lib/supabase` for Supabase config
-- [ ] Create `src/lib/hooks` for custom hooks
-- [ ] Create `src/lib/types` for TypeScript types
-- [ ] Create `src/lib/utils` for helper functions
-- [ ] Create `src/components/ui` (shadcn components)
-- [ ] Create `src/components/admin` for admin components
-- [ ] Create `src/components/public` for public components
-- [ ] Create `src/components/shared` for shared components
+- [x] Create `src/lib` directory for utilities
+- [x] Create `src/lib/supabase` for Supabase config
+- [x] Create `src/lib/hooks` for custom hooks
+- [x] Create `src/lib/types` for TypeScript types
+- [x] Create `src/lib/utils` for helper functions
+- [x] Create `src/components/ui` (shadcn components)
+- [x] Create `src/components/admin` for admin components
+- [x] Create `src/components/public` for public components
+- [x] Create `src/components/shared` for shared components
 
 #### 2.4 Configure Supabase Client
 
