@@ -1,26 +1,225 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* SlamBase Wrestling Theme - Tailwind v4 */
+
+@theme {
+  /* ===== COLOR PALETTE ===== */
+
+  /* Primary Colors (Wrestling Red Energy) */
+  --color-primary-50: #fef2f2;
+  --color-primary-100: #fee2e2;
+  --color-primary-200: #fecaca;
+  --color-primary-300: #fca5a5;
+  --color-primary-400: #f87171;
+  --color-primary-500: #ef4444;
+  --color-primary-600: #dc2626;
+  --color-primary-700: #b91c1c;
+  --color-primary-800: #991b1b;
+  --color-primary-900: #7f1d1d;
+  --color-primary-950: #450a0a;
+
+  /* Secondary Colors (Championship Gold) */
+  --color-secondary-50: #fefce8;
+  --color-secondary-100: #fef9c3;
+  --color-secondary-200: #fef08a;
+  --color-secondary-300: #fde047;
+  --color-secondary-400: #facc15;
+  --color-secondary-500: #eab308;
+  --color-secondary-600: #ca8a04;
+  --color-secondary-700: #a16207;
+  --color-secondary-800: #854d0e;
+  --color-secondary-900: #713f12;
+  --color-secondary-950: #422006;
+
+  /* Dark Theme Base */
+  --color-dark-50: #f9fafb;
+  --color-dark-100: #f3f4f6;
+  --color-dark-200: #e5e7eb;
+  --color-dark-300: #d1d5db;
+  --color-dark-400: #9ca3af;
+  --color-dark-500: #6b7280;
+  --color-dark-600: #4b5563;
+  --color-dark-700: #374151;
+  --color-dark-800: #1f2937;
+  --color-dark-900: #111827;
+  --color-dark-950: #030712;
+
+  /* ===== TYPOGRAPHY ===== */
+
+  --font-size-display-xl: 4.5rem;
+  --font-size-display-lg: 3.5rem;
+  --font-size-display-md: 2.5rem;
+
+  --line-height-display-xl: 1;
+  --line-height-display-lg: 1.1;
+  --line-height-display-md: 1.2;
+
+  /* ===== EFFECTS ===== */
+
+  --shadow-glow: 0 0 20px rgb(239 68 68 / 0.4);
+  --shadow-glow-lg: 0 0 40px rgb(239 68 68 / 0.6);
+  --shadow-glow-gold: 0 0 20px rgb(234 179 8 / 0.4);
+  --shadow-glow-gold-lg: 0 0 40px rgb(234 179 8 / 0.6);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ===== BASE STYLES ===== */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: theme(colors.dark.200);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: theme(colors.dark.950);
+    color: theme(colors.dark.50);
+    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-bebas), Impact, sans-serif;
+    letter-spacing: -0.025em;
+  }
+
+  h1 {
+    font-size: var(--font-size-display-xl);
+    line-height: var(--line-height-display-xl);
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: var(--font-size-display-lg);
+    line-height: var(--line-height-display-lg);
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: var(--font-size-display-md);
+    line-height: var(--line-height-display-md);
+    font-weight: 700;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ===== CUSTOM UTILITIES ===== */
+
+@layer utilities {
+  /* Font Family Utilities */
+  .font-display {
+    font-family: var(--font-bebas), Impact, sans-serif;
+  }
+
+  .font-body {
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  .font-mono {
+    font-family: var(--font-jetbrains), "Courier New", monospace;
+  }
+
+  /* Display Typography */
+  .text-display-xl {
+    font-size: var(--font-size-display-xl);
+    line-height: var(--line-height-display-xl);
+    font-weight: 700;
+  }
+
+  .text-display-lg {
+    font-size: var(--font-size-display-lg);
+    line-height: var(--line-height-display-lg);
+    font-weight: 700;
+  }
+
+  .text-display-md {
+    font-size: var(--font-size-display-md);
+    line-height: var(--line-height-display-md);
+    font-weight: 700;
+  }
+
+  /* Glow Effects */
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-glow-lg {
+    box-shadow: var(--shadow-glow-lg);
+  }
+
+  .shadow-glow-gold {
+    box-shadow: var(--shadow-glow-gold);
+  }
+
+  .shadow-glow-gold-lg {
+    box-shadow: var(--shadow-glow-gold-lg);
+  }
+
+  /* Background Gradients - Tailwind v4 compatible */
+  .bg-gradient-primary {
+    background-image: linear-gradient(
+      to bottom right,
+      theme(colors.primary.500),
+      theme(colors.primary.700)
+    );
+  }
+
+  .bg-gradient-gold {
+    background-image: linear-gradient(
+      to bottom right,
+      theme(colors.secondary.400),
+      theme(colors.secondary.600)
+    );
+  }
+
+  .bg-gradient-dark {
+    background-image: linear-gradient(
+      to bottom right,
+      theme(colors.dark.900),
+      theme(colors.dark.950)
+    );
+  }
+}
+
+/* ===== COMPONENT STYLES ===== */
+
+@layer components {
+  .card-hover {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+
+  .card-hover:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-0.25rem);
+  }
+
+  .championship-badge {
+    background-image: linear-gradient(
+      to bottom right,
+      theme(colors.secondary.400),
+      theme(colors.secondary.600)
+    );
+    color: theme(colors.dark.950);
+    font-weight: 700;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-radius: 0.375rem;
+    box-shadow: var(--shadow-glow-gold);
+  }
 }
