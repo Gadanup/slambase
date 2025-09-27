@@ -157,19 +157,19 @@
 
 #### 4.3 Setup Protected Routes
 
-- [ ] Create `middleware.ts` in root
-- [ ] Add auth check logic
-- [ ] Redirect unauthenticated users to login
-- [ ] Allow public routes
-- [ ] Protect all `/admin/*` routes
+- [x] Create `middleware.ts` in root
+- [x] Add auth check logic
+- [x] Redirect unauthenticated users to login
+- [x] Allow public routes
+- [x] Protect all `/admin/*` routes
 
 #### 4.4 Create Auth Components
 
-- [ ] Create `LogoutButton` component
-- [ ] Create `AuthProvider` context component
-- [ ] Create `useAuth` custom hook
-- [ ] Add user session management
-- [ ] Test login/logout flow
+- [x] Create `LogoutButton` component
+- [x] Create `AuthProvider` context component
+- [x] Create `useAuth` custom hook
+- [x] Add user session management
+- [x] Test login/logout flow
 
 ---
 
