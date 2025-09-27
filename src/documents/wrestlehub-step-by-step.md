@@ -177,11 +177,11 @@
 
 #### 5.1 Create Admin Layout
 
-- [ ] Create `app/admin/layout.tsx`
-- [ ] Add sidebar navigation component
-- [ ] Add top header with user info
-- [ ] Add logout button in header
-- [ ] Make layout responsive (mobile menu)
+- [x] Create `app/admin/layout.tsx`
+- [x] Add sidebar navigation component
+- [x] Add top header with user info
+- [x] Add logout button in header
+- [x] Make layout responsive (mobile menu)
 
 #### 5.2 Build Navigation Sidebar
 
