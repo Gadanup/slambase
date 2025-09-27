@@ -1,14 +1,12 @@
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Users, Trophy, Calendar, Swords } from "lucide-react";
+import { StatsCard } from "@/components/admin/StatsCard";
+import { RecentActivity } from "@/components/admin/RecentActivity";
+import { QuickActions } from "@/components/admin/QuickActions";
+import { DashboardSkeleton } from "@/components/admin/DashboardSkeleton";
 
-export default async function DashboardPage() {
+async function DashboardContent() {
   const supabase = await createClient();
 
   // Get quick stats
@@ -24,113 +22,141 @@ export default async function DashboardPage() {
     supabase.from("feuds").select("*", { count: "exact", head: true }),
   ]);
 
+  // Get recent activity
+  const { data: recentWrestlers } = await supabase
+    .from("wrestlers")
+    .select("id, name, ring_name, created_at")
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  const { data: recentEvents } = await supabase
+    .from("events")
+    .select("id, name, event_date, event_type, created_at")
+    .order("created_at", { ascending: false })
+    .limit(5);
+
+  // Quick actions configuration
+  const quickActions = [
+    {
+      title: "Add Wrestler",
+      description: "Create new profile",
+      href: "/admin/wrestlers/new",
+      icon: Users,
+      colorScheme: "primary" as const,
+    },
+    {
+      title: "Add Championship",
+      description: "Create new title",
+      href: "/admin/championships/new",
+      icon: Trophy,
+      colorScheme: "secondary" as const,
+    },
+    {
+      title: "Add Event",
+      description: "Schedule show",
+      href: "/admin/events/new",
+      icon: Calendar,
+      colorScheme: "primary" as const,
+    },
+    {
+      title: "Add Feud",
+      description: "Create storyline",
+      href: "/admin/feuds/new",
+      icon: Swords,
+      colorScheme: "secondary" as const,
+    },
+  ];
+
+  // Format recent wrestlers
+  const wrestlerActivity =
+    recentWrestlers?.map((w) => ({
+      id: w.id,
+      title: w.ring_name || w.name,
+      subtitle: `Added ${new Date(w.created_at).toLocaleDateString()}`,
+      badge: { label: "New", variant: "outline" as const },
+    })) || [];
+
+  // Format recent events
+  const eventActivity =
+    recentEvents?.map((e) => ({
+      id: e.id,
+      title: e.name,
+      subtitle: new Date(e.event_date).toLocaleDateString(),
+      badge: { label: e.event_type, variant: "outline" as const },
+    })) || [];
+
   return (
     <div className="space-y-8">
-      {/* Page Title */}
+      {/* Page Header */}
       <div>
         <h1 className="font-display text-display-md text-primary-500 mb-2">
           Dashboard
         </h1>
-        <p className="text-dark-400">Overview of your wrestling database</p>
+        <p className="text-dark-400">
+          Welcome back! Here's what's happening with your wrestling database.
+        </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-dark-900 border-dark-800 card-hover">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-dark-300">
-              Total Wrestlers
-            </CardTitle>
-            <Users className="h-4 w-4 text-primary-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-primary-500">
-              {wrestlersCount || 0}
-            </div>
-            <p className="text-xs text-dark-400 mt-1">Active roster members</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-dark-900 border-dark-800 card-hover">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-dark-300">
-              Championships
-            </CardTitle>
-            <Trophy className="h-4 w-4 text-secondary-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-secondary-500">
-              {championshipsCount || 0}
-            </div>
-            <p className="text-xs text-dark-400 mt-1">Active titles</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-dark-900 border-dark-800 card-hover">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-dark-300">
-              Events
-            </CardTitle>
-            <Calendar className="h-4 w-4 text-primary-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-primary-500">
-              {eventsCount || 0}
-            </div>
-            <p className="text-xs text-dark-400 mt-1">Total events</p>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-dark-900 border-dark-800 card-hover">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-dark-300">
-              Active Feuds
-            </CardTitle>
-            <Swords className="h-4 w-4 text-secondary-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-secondary-500">
-              {feudsCount || 0}
-            </div>
-            <p className="text-xs text-dark-400 mt-1">Ongoing storylines</p>
-          </CardContent>
-        </Card>
+        <StatsCard
+          title="Total Wrestlers"
+          value={wrestlersCount || 0}
+          description="Active roster members"
+          icon={Users}
+          colorScheme="primary"
+        />
+        <StatsCard
+          title="Championships"
+          value={championshipsCount || 0}
+          description="Active titles"
+          icon={Trophy}
+          colorScheme="secondary"
+        />
+        <StatsCard
+          title="Events"
+          value={eventsCount || 0}
+          description="Total events"
+          icon={Calendar}
+          colorScheme="primary"
+        />
+        <StatsCard
+          title="Active Feuds"
+          value={feudsCount || 0}
+          description="Ongoing storylines"
+          icon={Swords}
+          colorScheme="secondary"
+        />
       </div>
 
       {/* Quick Actions */}
-      <Card className="bg-dark-900 border-dark-800">
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Common admin tasks</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <button className="p-4 bg-dark-800 hover:bg-dark-700 rounded-lg transition-colors text-left">
-              <Users className="h-6 w-6 text-primary-500 mb-2" />
-              <p className="font-semibold text-dark-100">Add Wrestler</p>
-              <p className="text-sm text-dark-400">Create new profile</p>
-            </button>
+      <QuickActions actions={quickActions} />
 
-            <button className="p-4 bg-dark-800 hover:bg-dark-700 rounded-lg transition-colors text-left">
-              <Trophy className="h-6 w-6 text-secondary-500 mb-2" />
-              <p className="font-semibold text-dark-100">Add Championship</p>
-              <p className="text-sm text-dark-400">Create new title</p>
-            </button>
-
-            <button className="p-4 bg-dark-800 hover:bg-dark-700 rounded-lg transition-colors text-left">
-              <Calendar className="h-6 w-6 text-primary-500 mb-2" />
-              <p className="font-semibold text-dark-100">Add Event</p>
-              <p className="text-sm text-dark-400">Schedule show</p>
-            </button>
-
-            <button className="p-4 bg-dark-800 hover:bg-dark-700 rounded-lg transition-colors text-left">
-              <Swords className="h-6 w-6 text-secondary-500 mb-2" />
-              <p className="font-semibold text-dark-100">Add Feud</p>
-              <p className="text-sm text-dark-400">Create storyline</p>
-            </button>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Recent Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <RecentActivity
+          title="Recent Wrestlers"
+          description="Latest additions to the roster"
+          items={wrestlerActivity}
+          emptyMessage="No wrestlers yet"
+          colorScheme="primary"
+        />
+        <RecentActivity
+          title="Recent Events"
+          description="Latest scheduled shows"
+          items={eventActivity}
+          emptyMessage="No events yet"
+          colorScheme="secondary"
+        />
+      </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<DashboardSkeleton />}>
+      <DashboardContent />
+    </Suspense>
   );
 }

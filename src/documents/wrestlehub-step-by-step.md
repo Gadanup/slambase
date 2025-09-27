@@ -185,19 +185,19 @@
 
 #### 5.2 Build Navigation Sidebar
 
-- [ ] Create `AdminSidebar` component
-- [ ] Add navigation links (Dashboard, Wrestlers, Championships, Events, Feuds)
-- [ ] Add active link highlighting
-- [ ] Add icons for each section (lucide-react)
-- [ ] Add collapse/expand functionality for mobile
+- [x] Create `AdminSidebar` component
+- [x] Add navigation links (Dashboard, Wrestlers, Championships, Events, Feuds)
+- [x] Add active link highlighting
+- [x] Add icons for each section (lucide-react)
+- [x] Add collapse/expand functionality for mobile
 
 #### 5.3 Create Dashboard Page
 
-- [ ] Create `app/admin/dashboard/page.tsx`
-- [ ] Add page header with title
-- [ ] Create stats cards layout (4-column grid)
-- [ ] Add placeholder for stats (total wrestlers, titles, events, feuds)
-- [ ] Add quick actions section
+- [x] Create `app/admin/dashboard/page.tsx`
+- [x] Add page header with title
+- [x] Create stats cards layout (4-column grid)
+- [x] Add placeholder for stats (total wrestlers, titles, events, feuds)
+- [x] Add quick actions section
 
 #### 5.4 Setup Dashboard Components
 
