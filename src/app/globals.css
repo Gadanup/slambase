@@ -223,3 +223,135 @@
     box-shadow: var(--shadow-glow-gold);
   }
 }
+
+/* ===== RADIX UI COMPONENTS STYLING ===== */
+
+/* Select Dropdown Content */
+[data-radix-select-content],
+[data-radix-popper-content-wrapper] {
+  background-color: theme(colors.dark.900) !important;
+  border: 1px solid theme(colors.dark.700) !important;
+  border-radius: var(--radius-md);
+  padding: 0.25rem;
+  z-index: 50;
+}
+
+/* Select Items */
+[data-radix-select-item] {
+  background-color: transparent;
+  color: theme(colors.dark.100);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer !important;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+/* Select Item Hover */
+[data-radix-select-item]:hover {
+  background-color: theme(colors.dark.800);
+  color: theme(colors.primary.400);
+}
+
+/* Select Item Selected/Highlighted */
+[data-radix-select-item][data-highlighted],
+[data-radix-select-item][data-state="checked"] {
+  background-color: theme(colors.primary.600);
+  color: theme(colors.dark.50);
+}
+
+/* Calendar/Date Picker Popover */
+[data-radix-popover-content] {
+  background-color: theme(colors.dark.900) !important;
+  border: 1px solid theme(colors.dark.700) !important;
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  z-index: 50;
+}
+
+/* Calendar Days */
+.rdp-day {
+  color: theme(colors.dark.100);
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  cursor: pointer !important;
+}
+
+/* Calendar Day Hover */
+.rdp-day:hover:not(.rdp-day_selected):not(.rdp-day_disabled) {
+  background-color: theme(colors.dark.800);
+  color: theme(colors.primary.400);
+}
+
+/* Calendar Day Selected */
+.rdp-day_selected {
+  background-color: theme(colors.primary.600) !important;
+  color: theme(colors.dark.50) !important;
+  font-weight: 600;
+}
+
+/* Calendar Day Today */
+.rdp-day_today:not(.rdp-day_selected) {
+  border: 1px solid theme(colors.primary.500);
+  color: theme(colors.primary.400);
+}
+
+/* Calendar Day Disabled */
+.rdp-day_disabled {
+  color: theme(colors.dark.600);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Calendar Header (Month/Year) */
+.rdp-caption {
+  color: theme(colors.dark.100);
+  margin-bottom: 0.5rem;
+}
+
+/* Calendar Navigation Buttons */
+.rdp-nav_button {
+  color: theme(colors.dark.300);
+  transition: all 0.15s ease;
+}
+
+.rdp-nav_button:hover {
+  color: theme(colors.primary.400);
+  background-color: theme(colors.dark.800);
+}
+
+/* Calendar Weekday Labels */
+.rdp-head_cell {
+  color: theme(colors.dark.400);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* Dropdown Menu (for other dropdown components) */
+[data-radix-dropdown-menu-content] {
+  background-color: theme(colors.dark.900) !important;
+  border: 1px solid theme(colors.dark.700) !important;
+  border-radius: var(--radius-md);
+  padding: 0.25rem;
+  z-index: 50;
+}
+
+[data-radix-dropdown-menu-item] {
+  background-color: transparent;
+  color: theme(colors.dark.100);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer !important;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+[data-radix-dropdown-menu-item]:hover {
+  background-color: theme(colors.dark.800);
+  color: theme(colors.primary.400);
+}
+
+[data-radix-dropdown-menu-item][data-highlighted] {
+  background-color: theme(colors.dark.800);
+  color: theme(colors.primary.400);
+}

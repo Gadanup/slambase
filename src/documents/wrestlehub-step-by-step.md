@@ -201,11 +201,11 @@
 
 #### 5.4 Setup Dashboard Components
 
-- [ ] Create `StatsCard` component
-- [ ] Create `RecentActivity` component
-- [ ] Create `QuickActions` component
-- [ ] Add loading states
-- [ ] Style with theme colors
+- [x] Create `StatsCard` component
+- [x] Create `RecentActivity` component
+- [x] Create `QuickActions` component
+- [x] Add loading states
+- [x] Style with theme colors
 
 ---
 
@@ -213,35 +213,35 @@
 
 #### 6.1 Create Wrestlers List Page
 
-- [ ] Create `app/admin/wrestlers/page.tsx`
-- [ ] Add page header with "Add New Wrestler" button
-- [ ] Create wrestlers table component
-- [ ] Add search input
-- [ ] Add filter dropdowns (promotion, status)
+- [x] Create `app/admin/wrestlers/page.tsx`
+- [x] Add page header with "Add New Wrestler" button
+- [x] Create wrestlers table component
+- [x] Add search input
+- [x] Add filter dropdowns (promotion, status)
 
 #### 6.2 Setup TanStack Table
 
-- [ ] Create `WrestlerTable` component
-- [ ] Define table columns (name, ring name, promotion, status, actions)
-- [ ] Add sorting functionality
-- [ ] Add pagination
-- [ ] Add row selection (optional)
+- [x] Create `WrestlerTable` component
+- [x] Define table columns (name, ring name, promotion, status, actions)
+- [x] Add sorting functionality
+- [x] Add pagination
+- [x] Add row selection (optional)
 
 #### 6.3 Fetch Wrestlers Data
 
-- [ ] Create API route or server action
-- [ ] Use React Query to fetch wrestlers
-- [ ] Add loading skeleton
-- [ ] Add error handling
-- [ ] Add empty state UI
+- [x] Create API route or server action
+- [x] Use React Query to fetch wrestlers
+- [x] Add loading skeleton
+- [x] Add error handling
+- [x] Add empty state UI
 
 #### 6.4 Add Table Actions
 
-- [ ] Add "Edit" button in each row
-- [ ] Add "Delete" button in each row
-- [ ] Add "View" button in each row
-- [ ] Style action buttons
-- [ ] Add tooltips for actions
+- [x] Add "Edit" button in each row
+- [x] Add "Delete" button in each row
+- [x] Add "View" button in each row
+- [x] Style action buttons
+- [x] Add tooltips for actions
 
 ---
 
