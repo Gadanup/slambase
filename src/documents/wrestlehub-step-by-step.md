@@ -249,42 +249,46 @@
 
 #### 7.1 Create Wrestler Form Page
 
-- [ ] Create `app/admin/wrestlers/new/page.tsx`
-- [ ] Create `app/admin/wrestlers/[id]/edit/page.tsx`
-- [ ] Setup shared form component
-- [ ] Add page header with back button
-- [ ] Add form container
+- [x] Create `app/admin/wrestlers/new/page.tsx`
+- [x] Create `app/admin/wrestlers/[id]/edit/page.tsx`
+- [x] Setup shared form component
+- [x] Add page header with back button
+- [x] Add form container
 
 #### 7.2 Build Wrestler Form
 
-- [ ] Create `WrestlerForm` component
-- [ ] Setup React Hook Form with Zod validation
-- [ ] Add text inputs (name, ring name, birthplace)
-- [ ] Add textarea for bio
-- [ ] Add date pickers (debut date, birth date)
-- [ ] Add select for promotion
-- [ ] Add select for status (active, retired, etc.)
-- [ ] Add inputs for height, weight, finishing move
+- [x] Create `WrestlerForm` component
+- [x] Setup React Hook Form with Zod validation
+- [x] Add text inputs (name, ring name, birthplace)
+- [x] Add textarea for bio
+- [x] Add date pickers (debut date, birth date)
+- [x] Add select for promotion
+- [x] Add select for status (active, retired, etc.)
+- [x] Add inputs for height, weight, finishing move
 
 #### 7.3 Setup Image Upload
 
-- [ ] Create `ImageUpload` component
-- [ ] Add react-dropzone integration
-- [ ] Add image preview
-- [ ] Upload to Supabase Storage
-- [ ] Get public URL after upload
-- [ ] Add delete image functionality
-- [ ] Show upload progress
+- [x] Create `ImageUpload` component
+- [x] Add react-dropzone integration
+- [x] Add image preview
+- [x] Upload to Supabase Storage
+- [x] Get public URL after upload
+- [x] Add delete image functionality
+- [x] Show upload progress
 
 #### 7.4 Handle Form Submission
 
-- [ ] Create submit handler
-- [ ] Validate form data
-- [ ] Insert new wrestler to database (CREATE)
-- [ ] Update existing wrestler (UPDATE)
-- [ ] Show success toast notification
-- [ ] Redirect to wrestlers list
-- [ ] Handle errors and show error messages
+- [x] Create submit handler
+- [x] Validate form data
+- [x] Insert new wrestler to database (CREATE)
+- [x] Update existing wrestler (UPDATE)
+- [x] Show success toast notification
+- [x] Redirect to wrestlers list
+- [x] Handle errors and show error messages
+
+#### 7.5 Create wrestlers page
+
+- x] Create admin/wrestlers/[id] page;
 
 ---
 

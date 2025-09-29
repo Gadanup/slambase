@@ -1,7 +1,8 @@
+// components/admin/LoginForm.tsx - Updated to handle URL messages
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -30,6 +31,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<LoginFormValues>({
@@ -39,6 +41,21 @@ export function LoginForm() {
       password: "",
     },
   });
+
+  // Show message from URL params if present (from middleware redirects)
+  useEffect(() => {
+    const message = searchParams.get("message");
+    if (message) {
+      toast.error("Access Denied", {
+        description: message,
+      });
+
+      // Clear the message from URL after showing it
+      const url = new URL(window.location.href);
+      url.searchParams.delete("message");
+      window.history.replaceState({}, "", url.toString());
+    }
+  }, [searchParams]);
 
   async function onSubmit(values: LoginFormValues) {
     setIsLoading(true);
@@ -76,15 +93,17 @@ export function LoginForm() {
           return;
         }
 
-        // Success - redirect to admin dashboard
+        // Success - show toast and redirect
         toast.success("Login successful!", {
           description: `Welcome back, ${adminUser.email}`,
         });
 
+        // Redirect to dashboard - middleware will handle the rest
         router.push("/admin/dashboard");
-        router.refresh();
+        router.refresh(); // Force a refresh to trigger middleware
       }
     } catch (error) {
+      console.error("Login error:", error);
       toast.error("An error occurred", {
         description: "Please try again",
       });

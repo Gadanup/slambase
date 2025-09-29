@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { DeleteWrestlerDialog } from "@/components/admin/DeleteWrestlerDialog";
 import { WrestlerWithPromotion } from "@/lib/types";
 import {
   Card,
@@ -229,13 +230,18 @@ export function WrestlersTable({ wrestlers }: WrestlersTableProps) {
                             <Edit className="h-4 w-4" />
                           </Button>
                         </Link>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-500 hover:text-red-400 cursor-pointer"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <DeleteWrestlerDialog
+                          wrestler={wrestler}
+                          trigger={
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-red-500 hover:text-red-400 cursor-pointer"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          }
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

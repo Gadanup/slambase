@@ -6,17 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { EnhancedDatePicker } from "@/components/ui/enhanced-date-picker";
 import {
   Form,
   FormControl,
@@ -33,13 +28,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { Wrestler, Promotion } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
-// Validation schema
+// Updated validation schema with image_url
 const wrestlerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   ring_name: z.string().optional(),
@@ -54,6 +49,7 @@ const wrestlerSchema = z.object({
   promotion_id: z.number().optional().nullable(),
   brand: z.string().optional(),
   status: z.enum(["active", "retired", "released", "injured"]),
+  image_url: z.string().url().optional().or(z.literal("")), // Added image_url field
 });
 
 type WrestlerFormValues = z.infer<typeof wrestlerSchema>;
@@ -88,6 +84,7 @@ export function WrestlerForm({ wrestler, promotions }: WrestlerFormProps) {
       promotion_id: wrestler?.promotion_id || null,
       brand: wrestler?.brand || "",
       status: wrestler?.status || "active",
+      image_url: wrestler?.image_url || "", // Added image_url default
     },
   });
 
@@ -106,6 +103,7 @@ export function WrestlerForm({ wrestler, promotions }: WrestlerFormProps) {
         birth_date: values.birth_date
           ? format(values.birth_date, "yyyy-MM-dd")
           : null,
+        image_url: values.image_url || null, // Handle empty string as null
       };
 
       if (isEditing) {
@@ -152,7 +150,41 @@ export function WrestlerForm({ wrestler, promotions }: WrestlerFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* Image Upload Section */}
         <Card className="bg-dark-900 border-dark-800">
+          <CardHeader>
+            <CardTitle className="text-xl text-primary-400">
+              Wrestler Image
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="image_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value}
+                      onChange={field.onChange}
+                      disabled={isLoading}
+                      bucketName="wrestlers"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Basic Information */}
+        <Card className="bg-dark-900 border-dark-800">
+          <CardHeader>
+            <CardTitle className="text-xl text-primary-400">
+              Basic Information
+            </CardTitle>
+          </CardHeader>
           <CardContent className="pt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Name */}
@@ -221,41 +253,14 @@ export function WrestlerForm({ wrestler, promotions }: WrestlerFormProps) {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Birth Date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={
-                              (cn(
-                                "w-full pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              ),
-                              "cursor-pointer")
-                            }
-                            disabled={isLoading}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <FormControl>
+                      <EnhancedDatePicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder="Select birth date"
+                        disabled={isLoading}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -268,102 +273,12 @@ export function WrestlerForm({ wrestler, promotions }: WrestlerFormProps) {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Debut Date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={
-                              (cn(
-                                "w-full pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              ),
-                              "cursor-pointer")
-                            }
-                            disabled={isLoading}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Promotion */}
-              <FormField
-                control={form.control}
-                name="promotion_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Promotion</FormLabel>
-                    <Select
-                      disabled={isLoading}
-                      onValueChange={(value) =>
-                        field.onChange(
-                          value === "none" ? null : parseInt(value)
-                        )
-                      }
-                      value={field.value?.toString() || ""}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="cursor-pointer">
-                          <SelectValue placeholder="Select promotion" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem
-                          className="cursor-pointer hover:bg-red-400"
-                          value="none"
-                        >
-                          None
-                        </SelectItem>
-                        {promotions.map((promotion) => (
-                          <SelectItem
-                            className="cursor-pointer hover:bg-red-400"
-                            key={promotion.id}
-                            value={promotion.id.toString()}
-                          >
-                            {promotion.name} ({promotion.abbreviation})
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Brand */}
-              <FormField
-                control={form.control}
-                name="brand"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Brand</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Raw, SmackDown, Dynamite, etc."
+                      <EnhancedDatePicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder="Select debut date"
                         disabled={isLoading}
-                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -389,28 +304,16 @@ export function WrestlerForm({ wrestler, promotions }: WrestlerFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem
-                          className="cursor-pointer hover:bg-red-400"
-                          value="active"
-                        >
+                        <SelectItem className="cursor-pointer" value="active">
                           Active
                         </SelectItem>
-                        <SelectItem
-                          className="cursor-pointer hover:bg-red-400"
-                          value="retired"
-                        >
+                        <SelectItem className="cursor-pointer" value="retired">
                           Retired
                         </SelectItem>
-                        <SelectItem
-                          className="cursor-pointer hover:bg-red-400"
-                          value="injured"
-                        >
+                        <SelectItem className="cursor-pointer" value="injured">
                           Injured
                         </SelectItem>
-                        <SelectItem
-                          className="cursor-pointer hover:bg-red-400"
-                          value="released"
-                        >
+                        <SelectItem className="cursor-pointer" value="released">
                           Released
                         </SelectItem>
                       </SelectContent>
@@ -419,36 +322,70 @@ export function WrestlerForm({ wrestler, promotions }: WrestlerFormProps) {
                   </FormItem>
                 )}
               />
+            </div>
+          </CardContent>
+        </Card>
 
-              {/* Height */}
+        {/* Career Information */}
+        <Card className="bg-dark-900 border-dark-800">
+          <CardHeader>
+            <CardTitle className="text-xl text-primary-400">
+              Career Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Promotion */}
               <FormField
                 control={form.control}
-                name="height"
+                name="promotion_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Height</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="6'1"
-                        disabled={isLoading}
-                        {...field}
-                      />
-                    </FormControl>
+                    <FormLabel>Promotion</FormLabel>
+                    <Select
+                      disabled={isLoading}
+                      onValueChange={(value) =>
+                        field.onChange(
+                          value === "none" ? null : parseInt(value)
+                        )
+                      }
+                      value={field.value?.toString() || ""}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="cursor-pointer">
+                          <SelectValue placeholder="Select promotion" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem className="cursor-pointer" value="none">
+                          None
+                        </SelectItem>
+                        {promotions.map((promotion) => (
+                          <SelectItem
+                            className="cursor-pointer"
+                            key={promotion.id}
+                            value={promotion.id.toString()}
+                          >
+                            {promotion.name} ({promotion.abbreviation})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {/* Weight */}
+              {/* Brand */}
               <FormField
                 control={form.control}
-                name="weight"
+                name="brand"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Weight</FormLabel>
+                    <FormLabel>Brand</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="251 lbs"
+                        placeholder="Raw, SmackDown, Dynamite, etc."
                         disabled={isLoading}
                         {...field}
                       />
@@ -496,32 +433,88 @@ export function WrestlerForm({ wrestler, promotions }: WrestlerFormProps) {
                 )}
               />
             </div>
+          </CardContent>
+        </Card>
 
-            {/* Bio - Full Width */}
-            <div className="mt-6">
+        {/* Physical Stats */}
+        <Card className="bg-dark-900 border-dark-800">
+          <CardHeader>
+            <CardTitle className="text-xl text-primary-400">
+              Physical Stats
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Height */}
               <FormField
                 control={form.control}
-                name="bio"
+                name="height"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Bio</FormLabel>
+                    <FormLabel>Height</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Enter wrestler biography..."
-                        className="min-h-[120px] resize-none"
+                      <Input
+                        placeholder="6'1&quot; (185 cm)"
                         disabled={isLoading}
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      Brief description of the wrestler's career and
-                      achievements
-                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Weight */}
+              <FormField
+                control={form.control}
+                name="weight"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Weight</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="251 lbs (114 kg)"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Bio Section */}
+        <Card className="bg-dark-900 border-dark-800">
+          <CardHeader>
+            <CardTitle className="text-xl text-primary-400">
+              Biography
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Bio</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Enter wrestler biography..."
+                      className="min-h-[120px] resize-none"
+                      disabled={isLoading}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Brief description of the wrestler's career and achievements
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 

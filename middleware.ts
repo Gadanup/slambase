@@ -1,76 +1,112 @@
+// Root middleware.ts - More aggressive protection
 import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "./src/lib/supabase/middleware";
 import { createClient } from "./src/lib/supabase/server";
 
 export async function middleware(request: NextRequest) {
-  // Update session (refresh token if needed)
-  const response = await updateSession(request);
-
-  // Get the pathname
   const path = request.nextUrl.pathname;
 
-  // Check if trying to access admin routes
-  if (path.startsWith("/admin") && !path.startsWith("/admin/login")) {
+  console.log("🔥 MIDDLEWARE START:", path);
+
+  // Skip non-admin routes entirely
+  if (!path.startsWith("/admin")) {
+    return NextResponse.next();
+  }
+
+  try {
+    // Update session first
+    const response = await updateSession(request);
+
+    const isLoginPage = path === "/admin/login";
+
+    // Create Supabase client
     const supabase = await createClient();
 
-    // Get current user
+    // Get current user - this is the critical check
     const {
       data: { user },
-      error,
+      error: userError,
     } = await supabase.auth.getUser();
 
-    // No user or error - redirect to login
-    if (error || !user) {
-      const redirectUrl = new URL("/admin/login", request.url);
-      return NextResponse.redirect(redirectUrl);
+    console.log("👤 Auth Status:", {
+      hasUser: !!user,
+      userEmail: user?.email || "none",
+      error: userError?.message || "none",
+      path: path,
+    });
+
+    // LOGIN PAGE LOGIC
+    if (isLoginPage) {
+      // If user is authenticated, check if they're admin
+      if (user && !userError) {
+        const { data: adminUser } = await supabase
+          .from("admin_users")
+          .select("id")
+          .eq("id", user.id)
+          .single();
+
+        // Admin user trying to access login - redirect to dashboard
+        if (adminUser) {
+          console.log("✅ Admin at login page, redirecting to dashboard");
+          return NextResponse.redirect(
+            new URL("/admin/dashboard", request.url)
+          );
+        }
+      }
+
+      // Not admin or not authenticated - allow login page
+      console.log("✅ Allowing login page access");
+      return response;
     }
 
-    // Check if user is an admin
-    const { data: adminUser } = await supabase
+    // PROTECTED ADMIN ROUTES LOGIC
+    // If no user or auth error - BLOCK ACCESS
+    if (!user || userError) {
+      console.log("❌ BLOCKING - No authenticated user for:", path);
+      const loginUrl = new URL("/admin/login", request.url);
+      loginUrl.searchParams.set(
+        "message",
+        "Please login to access admin dashboard"
+      );
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Check admin privileges
+    const { data: adminUser, error: adminError } = await supabase
       .from("admin_users")
-      .select("*")
+      .select("id, role")
       .eq("id", user.id)
       .single();
 
-    // Not an admin - redirect to login
-    if (!adminUser) {
-      const redirectUrl = new URL("/admin/login", request.url);
-      return NextResponse.redirect(redirectUrl);
+    console.log("👑 Admin Check:", {
+      isAdmin: !!adminUser,
+      error: adminError?.message || "none",
+    });
+
+    // If not admin - BLOCK ACCESS
+    if (!adminUser || adminError) {
+      console.log("❌ BLOCKING - Not an admin for:", path);
+      const loginUrl = new URL("/admin/login", request.url);
+      loginUrl.searchParams.set("message", "Admin access required");
+      return NextResponse.redirect(loginUrl);
     }
+
+    // All checks passed - allow access
+    console.log("✅ ALLOWING admin access to:", path);
+    return response;
+  } catch (error) {
+    console.error("💥 Middleware Error:", error);
+    const loginUrl = new URL("/admin/login", request.url);
+    loginUrl.searchParams.set("message", "Authentication error occurred");
+    return NextResponse.redirect(loginUrl);
   }
-
-  // If already logged in and trying to access login page, redirect to dashboard
-  if (path === "/admin/login") {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user) {
-      const { data: adminUser } = await supabase
-        .from("admin_users")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-
-      if (adminUser) {
-        const redirectUrl = new URL("/admin/dashboard", request.url);
-        return NextResponse.redirect(redirectUrl);
-      }
-    }
-  }
-
-  return response;
 }
 
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * Match admin routes specifically
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/admin/:path*",
   ],
 };

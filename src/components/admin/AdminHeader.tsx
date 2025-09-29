@@ -2,7 +2,7 @@ import { AdminUser } from "@/lib/types";
 import { LogoutButton } from "./LogoutButton";
 
 interface AdminHeaderProps {
-  adminUser: AdminUser;
+  adminUser?: AdminUser | null; // Made optional and nullable
 }
 
 export function AdminHeader({ adminUser }: AdminHeaderProps) {
@@ -16,10 +16,10 @@ export function AdminHeader({ adminUser }: AdminHeaderProps) {
         <div className="flex items-center gap-4 ml-auto">
           <div className="text-right hidden sm:block">
             <p className="text-sm font-medium text-dark-200">
-              {adminUser.email}
+              {adminUser?.email || "Loading..."}
             </p>
             <p className="text-xs text-dark-500 capitalize">
-              {adminUser.role.replace("_", " ")}
+              {adminUser?.role ? adminUser.role.replace("_", " ") : "Admin"}
             </p>
           </div>
 
